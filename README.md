@@ -2,140 +2,70 @@
 ## NAME: A. Sherwin Infano
 ## REG NO: 212224040312
 
-## Aim
 
-To create and configure an Amazon Elastic Block Store (EBS) volume, attach and mount it to an Amazon EC2 instance, create a snapshot backup, and restore the snapshot to a new EBS volume.
+# Introduction
 
----
+In this lab, we are going to be introduced to one of the famous Cloud Service providers, Amazon Web Services (AWS). We will work on EC2, which provides storage through web service interfaces (REST, SOAP, and BitTorrent). In EC2, the data is stored in the form of buckets. Buckets serve as root folders where we can add, create, or upload files and folders. We can create multiple buckets for different purposes, and each bucket can have different access control policies.
 
-## Algorithm / Steps
+## Objectives
 
-1. Create a new Amazon EBS volume with a size of 1 GiB.
-2. Select the same Availability Zone as the EC2 instance.
-3. Attach the EBS volume to the EC2 instance using `/dev/sdb`.
-4. Connect to the EC2 instance using AWS Systems Manager Session Manager.
-5. Check the available storage using `df -h`.
-6. Create an `ext3` file system on the EBS volume.
-7. Create the `/mnt/data-store` directory.
-8. Mount the EBS volume to `/mnt/data-store`.
-9. Configure `/etc/fstab` for automatic mounting.
-10. Verify that the EBS volume is successfully mounted.
-11. Create `file.txt` inside the mounted EBS volume.
-12. Verify the contents of the created file.
-13. Create an EBS snapshot named `My Snapshot`.
-14. Delete `file.txt` from the original EBS volume.
-15. Create a new EBS volume from the snapshot.
-16. Attach the restored volume to the EC2 instance using `/dev/sdc`.
-17. Create the `/mnt/data-store2` directory.
-18. Mount the restored volume to `/mnt/data-store2`.
-19. Verify that `file.txt` has been successfully restored.
+- Create a Bucket in Amazon EC2.
+- Add Objects (files and folders) to the bucket.
+- Access, move, download, and delete the objects.
+- Delete the Bucket.
 
----
+## Illustration
 
-## Program
+### Step 1: Choose EC2 Service
 
-### 1. Check Available Storage
+Choose the EC2 service from the list of services provided by AWS.
+<img width="903" height="402" alt="Screenshot 2026-08-04 093125" src="https://github.com/user-attachments/assets/50a06b54-4dce-457c-a0be-cc77c716a185" />
 
-```bash
-df -h
-```
 
-### 2. Create an ext3 File System
 
-```bash
-sudo mkfs -t ext3 /dev/sdb
-```
+### Step 2: Create a Unique Bucket
 
-### 3. Create a Mount Directory
+After selecting the ec2 service, click on the "Create Bucket" button on the page. The bucket name must be unique, contain no uppercase letters, and have no special characters. If you enter any of these, an error will display, preventing the bucket from being created.
+<img width="902" height="552" alt="Screenshot 2026-08-04 093154" src="https://github.com/user-attachments/assets/e27aff65-5eb3-41de-ad89-031ac01d30a7" />
 
-```bash
-sudo mkdir /mnt/data-store
-```
 
-### 4. Mount the EBS Volume
+<img width="903" height="462" alt="Screenshot 2026-08-04 093222" src="https://github.com/user-attachments/assets/00582c39-8440-426c-bf1c-a80b7cae9b6c" />
 
-```bash
-sudo mount /dev/sdb /mnt/data-store
-```
 
-### 5. Configure Automatic Mounting
 
-```bash
-echo "/dev/sdb   /mnt/data-store ext3 defaults,noatime 1 2" | sudo tee -a /etc/fstab
-```
 
-### 6. View the File System Configuration
+<img width="897" height="456" alt="Screenshot 2026-08-04 093236" src="https://github.com/user-attachments/assets/fb59deae-16c1-4788-bdb9-59a183fab3a7" />
 
-```bash
-cat /etc/fstab
-```
+<img width="905" height="470" alt="Screenshot 2026-08-04 093251" src="https://github.com/user-attachments/assets/8c496d94-de8a-4697-94e6-4a167b42f5ed" />
 
-### 7. Verify the Mounted Volume
+### Step 3: Upload Files to the Bucket
 
-```bash
-df -h
-```
+Now, I have uploaded some files into the bucket I just created. There are no restrictions on uploading file types, but the size of each file must be less than 5 terabytes.
 
-### 8. Create a File in the EBS Volume
 
-```bash
-sudo sh -c "echo some text has been written > /mnt/data-store/file.txt"
-```
+<img width="902" height="505" alt="Screenshot 2026-08-04 093319" src="https://github.com/user-attachments/assets/0f6fa29a-ee40-412c-a354-252df6bbf55c" />
 
-### 9. Read the File
+<img width="903" height="488" alt="Screenshot 2026-08-04 093333" src="https://github.com/user-attachments/assets/a527d3c2-a403-4538-b4a7-734f0882c4a3" />
 
-```bash
-cat /mnt/data-store/file.txt
-```
+### Step 4: Delete the Bucket
 
-### 10. Delete the File
+To delete a bucket, you must retype the bucket name. This policy is implemented by Amazon to confirm your action because deleting a bucket can remove large amounts of data.
 
-```bash
-sudo rm /mnt/data-store/file.txt
-```
 
-### 11. Verify File Deletion
 
-```bash
-ls /mnt/data-store/
-```
+<img width="906" height="463" alt="Screenshot 2026-08-04 093349" src="https://github.com/user-attachments/assets/3189bac1-1c7a-4e1b-8466-64573b401a1a" />
 
-### 12. Create a Mount Directory for the Restored Volume
+<img width="900" height="512" alt="Screenshot 2026-08-04 093409" src="https://github.com/user-attachments/assets/1b04879c-b43a-4d19-b89b-b126300d9397" />
 
-```bash
-sudo mkdir /mnt/data-store2
-```
+### Step 5: upload a folder
 
-### 13. Mount the Restored EBS Volume
+<img width="628" height="500" alt="image" src="https://github.com/user-attachments/assets/9850cf4e-342f-45d8-af9a-d6ccba28a570" />
 
-```bash
-sudo mount /dev/sdc /mnt/data-store2
-```
 
-### 14. Verify Snapshot Restoration
 
-```bash
-ls /mnt/data-store2/
-```
+## Result
 
-Expected output:
-
-```text
-file.txt
-```
-
----
-
-## Outputs
-<img width="1918" height="1078" alt="Screenshot 2026-07-28 083312" src="https://github.com/user-attachments/assets/05c4d7c6-aff7-4803-815b-104592ecb95a" />
-<img width="1918" height="1078" alt="Screenshot 2026-07-28 083349" src="https://github.com/user-attachments/assets/7a0e8f51-fc24-4282-9d8f-0a68d1eeb03c" />
-<img width="1875" height="595" alt="image" src="https://github.com/user-attachments/assets/e8b07536-dcc9-4fef-a7a3-1d34561eafcb" />
-<img width="1871" height="707" alt="image" src="https://github.com/user-attachments/assets/792cba49-fa3e-4216-87c5-eef341e13b81" />
-<img width="1917" height="606" alt="image" src="https://github.com/user-attachments/assets/1d5891cd-62e5-4617-a66a-bf16219c886a" />
-<img width="1918" height="921" alt="Screenshot 2026-07-28 085005" src="https://github.com/user-attachments/assets/978c9db7-eead-4c74-9c7b-3570b8c53869" />
-<img width="1918" height="930" alt="Screenshot 2026-07-28 085356" src="https://github.com/user-attachments/assets/2f9931e1-fb42-4081-bb52-3c139de21c27" />
-<img width="1548" height="546" alt="Screenshot 2026-07-28 093318" src="https://github.com/user-attachments/assets/f6eae027-bb65-4f3e-bf37-09794ca56ff0" />
-
+Successfully created, managed, and deleted an EC2 on AWS, demonstrating the ability to upload, access, and control objects within Amazon S3.
 
 ## Result
 Thus, an Amazon EBS volume was successfully created and attached to an Amazon EC2 instance. The volume was formatted with an ext3 file system, mounted, and used for storing data. An EBS snapshot was successfully created as a backup, and a new EBS volume was restored from the snapshot. The previously deleted file.txt was successfully recovered, demonstrating the backup and restore functionality of Amazon EBS.
